@@ -16,5 +16,3 @@ if __name__ == '__main__':
         ingoing = f.read()
         lines = ingoing.split('\n')
         print(f'Solution part 2: {part_2(lines)}')
-
-    print(main(lines))
