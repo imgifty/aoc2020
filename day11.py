@@ -1,3 +1,6 @@
+import copy
+
+
 class Seat:
     def __init__(self, state, row, col, max_row, max_col):
         self.state = state
@@ -24,6 +27,11 @@ class Seat:
             seat.state = array[seat.row][seat.col].state
         
         return valid_seats
+
+    def adjacent_seats_new(self, array):
+
+
+        return valid_seats
     
     def __repr__(self):
         return self.state
@@ -35,12 +43,12 @@ def part_1(input):
     seats = [[Seat(input[i][j], i, j, max_row, max_col) for j in range(max_col)] for i in range(max_row)]
 
     def apply_rules(seats):
-        seats_new = seats.copy()
+        seats_new = copy.deepcopy(seats)
 
         for row in range(max_row):
             for col in range(max_col):
                 seat = seats[row][col]
-                new_seat = seats_new[col][row]
+                new_seat = seats_new[row][col]
 
                 if seat.state == 'L' and len([True for s in seat.adjacent_seats(seats) if s.state == '#']) == 0:
                     new_seat.state = '#'
@@ -49,12 +57,17 @@ def part_1(input):
 
         return seats_new
 
-    import pprint; pprint.pprint(seats)
+    found = {}
+
     while True:
         seats = apply_rules(seats)
-        # print(seats)
-        pprint.pprint(seats)
-        breakpoint()
+        h = ''.join([''.join([s.state for s in row]) for row in seats])
+
+        if h not in found:
+            found[h] = True
+        else:
+            count = 0
+            return len([True for a in h if a == '#'])
 
 
 def part_2(input):
