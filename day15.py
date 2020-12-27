@@ -1,59 +1,37 @@
-def part_1(input):
-    memory = {}
+from collections import deque
+from collections import defaultdict
+from functools import partial
+
+
+def do_count(input, nth_element):
+    memory = defaultdict(partial(deque, maxlen=2))
     last_number = 0
     iteration = 0
 
     for i in input:
         last_number = i
         iteration += 1
-        if last_number not in memory:
-            memory[last_number] = [iteration]
-        else:
-            memory[last_number].append(iteration)
+        memory[last_number].append(iteration)
 
-    while iteration < 2020:
+    while iteration < nth_element:
         iteration += 1
         if last_number in memory:
             if len(memory[last_number]) == 1:
                 last_number = 0
             else:
-                last_number = memory[last_number][-1] - memory[last_number][-2]
+                last_number = memory[last_number][1] - memory[last_number][0]
 
-        if last_number in memory:
-            memory[last_number].append(iteration)
-        else:
-            memory[last_number] = [iteration]
+        memory[last_number].append(iteration)
 
     return last_number
+
+
+def part_1(input):
+    return do_count(input, 2020)
 
 
 def part_2(input):
-    memory = {}
-    last_number = 0
-    iteration = 0
-
-    for i in input:
-        last_number = i
-        iteration += 1
-        if last_number not in memory:
-            memory[last_number] = [iteration]
-        else:
-            memory[last_number].append(iteration)
-
-    while iteration < 30000000:
-        iteration += 1
-        if last_number in memory:
-            if len(memory[last_number]) == 1:
-                last_number = 0
-            else:
-                last_number = memory[last_number][-1] - memory[last_number][-2]
-
-        if last_number in memory:
-            memory[last_number].append(iteration)
-        else:
-            memory[last_number] = [iteration]
-
-    return last_number
+    return do_count(input, 30000000)
 
 
 if __name__ == '__main__':
