@@ -56,15 +56,6 @@ def part_2(input):
         
         if not invalid:
             valid_tickets.append(ticket)
-    
-    def is_valid_partial_mapping(mapping):
-        for ticket in valid_tickets:
-            for i in range(len(mapping)):
-                if mapping[i] is not None:
-                    if ticket[i] not in validation[mapping[i]]:
-                        return False
-        return True
-    
 
     not_possibles = defaultdict(set)
     for ticket in valid_tickets:
@@ -72,6 +63,14 @@ def part_2(input):
             for key in validation.keys():
                 if ticket[a] not in validation[key]:
                     not_possibles[a].add(key)
+
+    def is_valid_partial_mapping(mapping):
+        for ticket in valid_tickets:
+            for i in range(len(mapping)):
+                if mapping[i] is not None:
+                    if ticket[i] not in validation[mapping[i]]:
+                        return False
+        return True
 
     def backtrack(state):
         if not is_valid_partial_mapping(state):
@@ -85,12 +84,12 @@ def part_2(input):
                    for i in variables_left}
         variables_left = sorted(variables_left, key=lambda x: len(domains[x]))
 
-        i = variables_left[0]
-        left = set(validation.keys()) - set([s for s in state.values() if s is not None]) - not_possibles[i]
+        chosen = variables_left[0]
+        left = set(validation.keys()) - set([s for s in state.values() if s is not None]) - not_possibles[chosen]
 
         for key in left:
             state_n = state.copy()
-            state_n[i] = key
+            state_n[chosen] = key
 
             out = backtrack(state_n)
             if out is not None:
@@ -101,32 +100,16 @@ def part_2(input):
     state = {i: None for i in range(len(validation.keys()))}
     solution = backtrack(state)
 
-    s = 1
+    result = 1
 
     for a in [i for i, v in solution.items() if 'departure' in v]:
-        s *= tickets[0][a]
+        result *= tickets[0][a]
     
-    return s
+    return result
 
 
 if __name__ == '__main__':
-#     ingoing = '''class: 1-3 or 5-7
-# row: 6-11 or 33-44
-# seat: 13-40 or 45-50
-
-# your ticket:
-# 7,1,14
-
-# nearby tickets:
-# 7,3,47
-# 40,4,50
-# 55,2,20
-# 38,6,12'''
-
-#     lines = ingoing.split('\n')
-#     print(f'Solution part 1: {part_1(lines)}')
-
-    with open('day16_part1.txt', 'r') as f:
+    with open('day16.txt', 'r') as f:
         ingoing = f.read()
         lines = ingoing.split('\n')
         print(f'Solution part 1: {part_1(lines)}')

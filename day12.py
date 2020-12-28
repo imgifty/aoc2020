@@ -10,7 +10,7 @@ def part_1(input):
         commands.append((command, int(rest)))
 
     def get_direction(degrees):
-        if  315 < degrees <= 360 or 0 <= degrees <= 45:
+        if 315 < degrees <= 360 or 0 <= degrees <= 45:
             return 'N'
         elif 45 < degrees <= 135:
             return 'E'
@@ -33,7 +33,7 @@ def part_1(input):
                 current_deg = (current_deg - amount) % 360
             elif command == 'R':
                 current_deg = (current_deg + amount) % 360
-    
+
     return abs(moved['N'] - moved['S']) + abs(moved['E'] - moved['W'])
 
 
@@ -46,7 +46,7 @@ def part_2(input):
         commands.append((command, int(rest)))
 
     def get_direction(degrees):
-        if  315 < degrees <= 360 or 0 <= degrees <= 45:
+        if 315 < degrees <= 360 or 0 <= degrees <= 45:
             return 'N'
         elif 45 < degrees <= 135:
             return 'E'
@@ -57,14 +57,15 @@ def part_2(input):
 
     def get_rotation_matrix(deg):
         deg = math.radians(deg)
-        return [(math.cos(deg), -math.sin(deg)), (math.sin(deg), math.cos(deg))]
+        return [(math.cos(deg), -math.sin(deg)),
+                (math.sin(deg), math.cos(deg))]
 
     def rotate(vector, degrees):
         mat = get_rotation_matrix(degrees)
-        return [vector[0]*mat[0][0] + vector[1]*mat[0][1], 
+        return [vector[0]*mat[0][0] + vector[1]*mat[0][1],
                 vector[0]*mat[1][0] + vector[1]*mat[1][1]]
 
-    way_point = [1, 10] # n/s and e/w
+    way_point = [1, 10]  # n/s and e/w
     moved = {'N': 0, 'S': 0, 'W': 0, 'E': 0}
     for command, amount in commands:
         if command in moved:
@@ -93,19 +94,13 @@ def part_2(input):
 
             elif command == 'R':
                 way_point = rotate(way_point, amount)
-    
+
     return int(abs(moved['N'] - moved['S']) + abs(moved['E'] - moved['W']))
 
 
 if __name__ == '__main__':
-#        ingoing = '''F10
-#N3
-#F7
-#R90
-#F11'''
-
-        with open('day12_part1.txt', 'r') as f:
-            ingoing = f.read()
-            lines = ingoing.split('\n')[0:-1]
-            print(f'Solution part 1: {part_1(lines)}')
-            print(f'Solution part 2: {part_2(lines)}')
+    with open('day12.txt', 'r') as f:
+        ingoing = f.read()
+        lines = ingoing.split('\n')[0:-1]
+        print(f'Solution part 1: {part_1(lines)}')
+        print(f'Solution part 2: {part_2(lines)}')

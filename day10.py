@@ -1,7 +1,5 @@
 def part_1(input):
     adapters = sorted([int(line) for line in input])
-    built_in = max(adapters) + 3
-
     adapters.insert(0, 0)
 
     out = [adapters[a+1] - adapters[a] for a in range(len(adapters)-1)]
@@ -20,16 +18,16 @@ def get_sequences(adapters, start_position):
             return cache[start_position]
 
         if start_position == 0:
-            return 1 
+            return 1
 
         found = 0
         for i in neighbors[start_position]:
             found += helper(adapters, i)
 
         cache[start_position] = found
-        
+
         return found
-    
+
     return helper(adapters, start_position)
 
 
@@ -40,12 +38,8 @@ def part_2(input):
 
 
 if __name__ == '__main__':
-    with open('day10_part1.txt', 'r') as f:
+    with open('day10.txt', 'r') as f:
         ingoing = f.read()
         lines = ingoing.split('\n')
         print(f'Solution part 1: {part_1(lines)}')
-
-    with open('day10_part2.txt', 'r') as f:
-        ingoing = f.read()
-        lines = ingoing.split('\n')
         print(f'Solution part 2: {part_2(lines)}')
