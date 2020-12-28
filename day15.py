@@ -1,10 +1,13 @@
 from collections import deque
 from collections import defaultdict
-from functools import partial
 
 
 def do_count(input, nth_element):
-    memory = defaultdict(partial(deque, maxlen=2))
+
+    def helper():
+        return deque(maxlen=2)
+
+    memory = defaultdict(helper)
     last_number = 0
     iteration = 0
 
