@@ -3,7 +3,6 @@ import re
 
 def part_1(input):
     PATTERN = re.compile(r'(byr|iyr|eyr|hgt|hcl|ecl|pid|cid):')
-    # keys = ['byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid', 'cid']
     valid_passwords = 0
     for password in input:
         found_keys = set()
@@ -11,7 +10,7 @@ def part_1(input):
             found = PATTERN.findall(line)
             if found is not None:
                 found_keys = found_keys | set(found)
-        
+
         if len(found_keys) == 8:
             valid_passwords += 1
         if len(found_keys) == 7 and 'cid' not in found_keys:
@@ -21,7 +20,10 @@ def part_1(input):
 
 
 def part_2(input):
-    PATTERN = re.compile(r'(byr:[0-9]+)|(iyr:[0-9]+)|(eyr:[0-9]+)|(hgt:[0-9]+(?:cm|in))|(hcl):#[0-9a-f]{6}|(ecl):(?:amb|blu|brn|gry|grn|hzl|oth)|^(pid):\d{9}$|cid')
+    p = (r'(byr:[0-9]+)|(iyr:[0-9]+)|(eyr:[0-9]+)|(hgt:[0-9]+(?:cm|in))'
+         r'|(hcl):#[0-9a-f]{6}|(ecl):(?:amb|blu|brn|gry|grn|hzl|oth)'
+         r'|^(pid):\d{9}$|cid')
+    PATTERN = re.compile(p)
     SMALL = re.compile(r'([a-z]+):([0-9a-z]+)')
 
     valid_passwords = 0
@@ -31,10 +33,10 @@ def part_2(input):
             found = PATTERN.findall(line)
 
             if found is not None:
-                keys = [j 
-                        for a in found 
+                keys = [j
+                        for a in found
                         for j in a if j != '']
-                
+
                 for k in keys:
                     m = SMALL.fullmatch(k)
                     if m is not None:
@@ -61,7 +63,8 @@ def part_2(input):
                     else:
                         found_keys.add(k)
 
-        if len(found_keys) == 8 or (len(found_keys) == 7 and 'cid' not in found_keys):
+        if len(found_keys) == 8 or (len(found_keys) == 7 and
+                                    'cid' not in found_keys):
             valid_passwords += 1
 
     return valid_passwords

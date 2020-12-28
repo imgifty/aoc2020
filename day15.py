@@ -38,9 +38,6 @@ def part_2(input):
 
 
 if __name__ == '__main__':
-    #ingoing = '''0
-#3
-#6'''
     ingoing = '''0,13,1,8,6,15'''
     lines = ingoing.split(',')
     lines = [int(number) for number in lines]

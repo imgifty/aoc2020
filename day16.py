@@ -1,5 +1,4 @@
 import re
-import random
 from collections import defaultdict
 
 
@@ -13,7 +12,7 @@ def parse_tickets(input):
     validation = {}
 
     for line in input:
-        m = RULES_PATTERN.match(line) 
+        m = RULES_PATTERN.match(line)
         if m is not None:
             g = [g for g in m.groups() if g is not None]
             first = range(int(g[1]), int(g[2])+1)
@@ -23,7 +22,7 @@ def parse_tickets(input):
             validation[g[0]] = joined
             accepted_numbers |= joined
 
-        tm = TICKET_PATTERN.match(line) 
+        tm = TICKET_PATTERN.match(line)
         if tm is not None:
             numbers = [int(n) for n in line.split(',')]
             tickets.append(numbers)
@@ -33,7 +32,7 @@ def parse_tickets(input):
 
 def part_1(input):
     tickets, accepted_numbers, _ = parse_tickets(input)
-    
+
     errors = []
     for ticket in tickets[1:]:
         for a in ticket:
@@ -53,7 +52,7 @@ def part_2(input):
         for a in ticket:
             if a not in accepted_numbers:
                 invalid = True
-        
+
         if not invalid:
             valid_tickets.append(ticket)
 
@@ -75,17 +74,21 @@ def part_2(input):
     def backtrack(state):
         if not is_valid_partial_mapping(state):
             return None
-        
+
         if len(state) == len(validation.keys()) and None not in state.values():
             return state
 
         variables_left = [i for i in range(len(state)) if state[i] is None]
-        domains = {i: set(validation.keys()) - set([s for s in state.values() if s is not None]) - not_possibles[i] 
+        domains = {i: set(validation.keys()) -
+                   set([s for s in state.values() if s is not None]) -
+                   not_possibles[i]
                    for i in variables_left}
         variables_left = sorted(variables_left, key=lambda x: len(domains[x]))
 
         chosen = variables_left[0]
-        left = set(validation.keys()) - set([s for s in state.values() if s is not None]) - not_possibles[chosen]
+        left = set(validation.keys()) - \
+            set([s for s in state.values() if s is not None]) - \
+            not_possibles[chosen]
 
         for key in left:
             state_n = state.copy()
@@ -94,9 +97,9 @@ def part_2(input):
             out = backtrack(state_n)
             if out is not None:
                 return out
-        
+
         return None
-    
+
     state = {i: None for i in range(len(validation.keys()))}
     solution = backtrack(state)
 
@@ -104,7 +107,7 @@ def part_2(input):
 
     for a in [i for i, v in solution.items() if 'departure' in v]:
         result *= tickets[0][a]
-    
+
     return result
 
 
