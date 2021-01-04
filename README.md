@@ -7,4 +7,4 @@ Execute the solutions by running:
 
 ```. venv/bin/activate```
 
-```python file.py```
+```python dayX.py```
